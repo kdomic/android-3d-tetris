@@ -1649,7 +1649,7 @@ containing a value of this type.
         public static final int action_mode_bar=0x7f050030;
         public static final int action_mode_bar_stub=0x7f05002f;
         public static final int action_mode_close_button=0x7f050022;
-        public static final int action_settings=0x7f050041;
+        public static final int action_settings=0x7f050042;
         public static final int activity_chooser_view_content=0x7f050023;
         public static final int always=0x7f05000d;
         public static final int beginning=0x7f050012;
@@ -1665,6 +1665,7 @@ containing a value of this type.
         public static final int end=0x7f050014;
         public static final int expand_activities_button=0x7f050024;
         public static final int expanded_menu=0x7f05002a;
+        public static final int glSurface=0x7f050041;
         public static final int home=0x7f050017;
         public static final int homeAsUp=0x7f050007;
         public static final int icon=0x7f050028;

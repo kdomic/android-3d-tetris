@@ -347,7 +347,7 @@ int id action_menu_presenter 0x7f05001d
 int id action_mode_bar 0x7f050030
 int id action_mode_bar_stub 0x7f05002f
 int id action_mode_close_button 0x7f050022
-int id action_settings 0x7f050041
+int id action_settings 0x7f050042
 int id activity_chooser_view_content 0x7f050023
 int id always 0x7f05000d
 int id beginning 0x7f050012
@@ -363,6 +363,7 @@ int id edit_query 0x7f050035
 int id end 0x7f050014
 int id expand_activities_button 0x7f050024
 int id expanded_menu 0x7f05002a
+int id glSurface 0x7f050041
 int id home 0x7f050017
 int id homeAsUp 0x7f050007
 int id icon 0x7f050028
