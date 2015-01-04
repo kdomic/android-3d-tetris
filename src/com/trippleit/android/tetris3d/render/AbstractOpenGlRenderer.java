@@ -120,7 +120,11 @@ public abstract class AbstractOpenGlRenderer implements Renderer {
 
 	}
 
-	public int getFPS() {
+	/**
+	 * 
+	 * @return 0 kada je prošla točno jedna sekunda
+	 */
+	public int getOneSec() {
 		return mFPS;
 	}
 

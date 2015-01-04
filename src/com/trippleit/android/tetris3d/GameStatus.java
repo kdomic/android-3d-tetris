@@ -12,14 +12,14 @@ public class GameStatus {
 	private static int gridSize;
 
 	private static IShape currentObject;
-	private static float currentObjectX, currentObjectY, currentObjectZ;
+	private static int currentObjectX, currentObjectY, currentObjectZ;
 
-	private static boolean gameStatus[][][];
+	private static boolean gameBoolMatrix[][][];
 
 	public static void init(Context c) {
 		gameHeight = 10;
 		gridSize = 5;
-		restartGameStatus();
+		restartGameBoolMatrix();
 		setCamera(-6, 8);
 	}
 
@@ -37,29 +37,6 @@ public class GameStatus {
 		GameStatus.cameraZ = h;
 	}
 
-	/**
-	 * Postavljanje matrice zauzeća polja, ukoliko nije inicijalizirana
-	 * inicijalizira se sa veličinom mreže i visinom igre
-	 * 
-	 * @param x
-	 * @param y
-	 * @param z
-	 */
-	public static void setGameStatus(int x, int y, int z) {
-		if (gameStatus == null) {
-			restartGameStatus();
-		}
-		gameStatus[x][y][z] = true;
-	}
-
-	private static void restartGameStatus() {
-		gameStatus = new boolean[gridSize][gridSize][gameHeight];
-		for (int i = 0; i < gridSize; i++)
-			for (int j = 0; j < gridSize; j++)
-				for (int k = 0; k < gameHeight; k++)
-					gameStatus[i][j][k] = false;
-	}
-
 	public static float getCameraX() {
 		return cameraX;
 	}
@@ -72,8 +49,31 @@ public class GameStatus {
 		return cameraZ;
 	}
 
-	public static boolean[][][] getGameStatus() {
-		return gameStatus;
+	/**
+	 * Postavljanje matrice zauzeća polja, ukoliko nije inicijalizirana
+	 * inicijalizira se sa veličinom mreže i visinom igre
+	 * 
+	 * @param x
+	 * @param y
+	 * @param z
+	 */
+	public static void setGameBoolMatrix(int x, int y, int z) {
+		if (gameBoolMatrix == null) {
+			restartGameBoolMatrix();
+		}
+		gameBoolMatrix[x][y][z] = true;
+	}
+
+	private static void restartGameBoolMatrix() {
+		gameBoolMatrix = new boolean[gridSize][gridSize][gameHeight];
+		for (int i = 0; i < gridSize; i++)
+			for (int j = 0; j < gridSize; j++)
+				for (int k = 0; k < gameHeight; k++)
+					gameBoolMatrix[i][j][k] = false;
+	}
+
+	public static boolean[][][] getGameBoolMatrix() {
+		return gameBoolMatrix;
 	}
 
 	public static int getGridSize() {
@@ -92,27 +92,48 @@ public class GameStatus {
 		GameStatus.currentObject = currentObject;
 	}
 
-	public static float getCurrentObjectX() {
+	public static void setCurrentObjectPosition(int x, int y, int z) {
+		currentObjectX = x;
+		currentObjectY = y;
+		currentObjectZ = z;
+	}
+
+	public static boolean setCurrentObjectPositionDown() {
+		if (currentObjectZ <= 0) {
+			return false;
+		}
+		if (gameBoolMatrix[currentObjectX][currentObjectY][currentObjectZ - 1] == true) {
+			return false;
+		}
+		currentObjectZ--;
+		return true;
+	}
+
+	public static void savePositionToBoolMatrix() {
+		gameBoolMatrix[currentObjectX][currentObjectY][currentObjectZ] = true;
+	}
+
+	public static int getCurrentObjectX() {
 		return currentObjectX;
 	}
 
-	public static void setCurrentObjectX(float currentObjectX) {
+	public static void setCurrentObjectX(int currentObjectX) {
 		GameStatus.currentObjectX = currentObjectX;
 	}
 
-	public static float getCurrentObjectY() {
+	public static int getCurrentObjectY() {
 		return currentObjectY;
 	}
 
-	public static void setCurrentObjectY(float currentObjectY) {
+	public static void setCurrentObjectY(int currentObjectY) {
 		GameStatus.currentObjectY = currentObjectY;
 	}
 
-	public static float getCurrentObjectZ() {
+	public static int getCurrentObjectZ() {
 		return currentObjectZ;
 	}
 
-	public static void setCurrentObjectZ(float currentObjectZ) {
+	public static void setCurrentObjectZ(int currentObjectZ) {
 		GameStatus.currentObjectZ = currentObjectZ;
 	}
 
