@@ -6,6 +6,7 @@ import android.content.Context;
 
 public class GameStatus {
 
+	private static float cameraR, cameraH;
 	private static float cameraX, cameraY, cameraZ;
 
 	private static int gameHeight;
@@ -20,7 +21,7 @@ public class GameStatus {
 		gameHeight = 10;
 		gridSize = 5;
 		restartGameBoolMatrix();
-		setCamera(-6, 8);
+		setCamera(-65, 10);
 	}
 
 	/**
@@ -32,21 +33,48 @@ public class GameStatus {
 	 *            Visina kammere
 	 */
 	public static void setCamera(float r, float h) {
-		GameStatus.cameraX = 20 * (float) Math.cos(Math.toRadians(r));
-		GameStatus.cameraY = 20 * (float) Math.sin(Math.toRadians(r));
-		GameStatus.cameraZ = h;
+		GameStatus.cameraR = r;
+		GameStatus.cameraH = h;
+		calculateCamera();
+	}
+	
+	private static void calculateCamera(){
+		GameStatus.cameraX = 15 * (float) Math.cos(Math.toRadians(GameStatus.cameraR));
+		GameStatus.cameraY = 15 * (float) Math.sin(Math.toRadians(GameStatus.cameraR));
+		GameStatus.cameraZ = GameStatus.cameraH;
 	}
 
 	public static float getCameraX() {
+		calculateCamera();
 		return cameraX;
 	}
 
 	public static float getCameraY() {
+		calculateCamera();
 		return cameraY;
 	}
 
 	public static float getCameraZ() {
+		calculateCamera();
 		return cameraZ;
+	}		
+
+	public static float getCameraR() {
+		return cameraR;
+	}
+
+	public static void setCameraR(float cameraR) {
+		GameStatus.cameraR = cameraR;
+		calculateCamera();
+	}
+
+	public static float getCameraH() {
+		return cameraH;
+	}
+
+	public static void setCameraH(float cameraH) {
+		GameStatus.cameraH = cameraH;
+		calculateCamera();
 	}
 
 	/**
@@ -92,10 +120,42 @@ public class GameStatus {
 		GameStatus.currentObject = currentObject;
 	}
 
-	public static void setCurrentObjectPosition(int x, int y, int z) {
+	public static void setCurrentPosition(int x, int y, int z) {
 		currentObjectX = x;
 		currentObjectY = y;
 		currentObjectZ = z;
+	}
+
+	public static boolean setCurrentXPositionPos() {
+		if (currentObjectX + 1 < gridSize) {
+			currentObjectX++;
+			return true;
+		}
+		return false;
+	}
+
+	public static boolean setCurrentXPositionNeg() {
+		if (currentObjectX - 1 >= 0) {
+			currentObjectX--;
+			return true;
+		}
+		return false;
+	}
+
+	public static boolean setCurrentYPositionPos() {
+		if (currentObjectY + 1 < gridSize) {
+			currentObjectY++;
+			return true;
+		}
+		return false;
+	}
+
+	public static boolean setCurrentYPositionNeg() {
+		if (currentObjectY - 1 >= 0) {
+			currentObjectY--;
+			return true;
+		}
+		return false;
 	}
 
 	public static boolean setCurrentObjectPositionDown() {

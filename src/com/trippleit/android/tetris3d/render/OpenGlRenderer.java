@@ -42,9 +42,9 @@ public class OpenGlRenderer extends AbstractOpenGlRenderer {
 	}
 
 	private void printAll(GL10 gl) {
-		for (int i = 0; i < 5; i++)
-			for (int j = 0; j < 5; j++)
-				for (int k = 0; k < 5; k++)
+		for (int i = 0; i < GameStatus.getGridSize(); i++)
+			for (int j = 0; j < GameStatus.getGridSize(); j++)
+				for (int k = 0; k < GameStatus.getGameHeight(); k++)
 					if (GameStatus.getGameBoolMatrix()[i][j][k]) {
 						gl.glPushMatrix();
 						Cube ccc = new Cube();
@@ -56,7 +56,7 @@ public class OpenGlRenderer extends AbstractOpenGlRenderer {
 
 	private void newShpe() {
 		GameStatus.setCurrentObject(new Cube());
-		GameStatus.setCurrentObjectPosition(0, 0, GameStatus.getGameHeight());
+		GameStatus.setCurrentPosition(0, 0, GameStatus.getGameHeight());
 	}
 
 	private void dropDown() {
