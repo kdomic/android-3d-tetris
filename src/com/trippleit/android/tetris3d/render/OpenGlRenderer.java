@@ -7,6 +7,12 @@ import com.trippleit.android.tetris3d.shapes.Coords;
 import com.trippleit.android.tetris3d.shapes.Cube;
 import com.trippleit.android.tetris3d.shapes.Grid;
 import com.trippleit.android.tetris3d.shapes.IShape;
+import com.trippleit.android.tetris3d.shapes.ObjectC;
+import com.trippleit.android.tetris3d.shapes.ObjectI;
+import com.trippleit.android.tetris3d.shapes.ObjectL;
+import com.trippleit.android.tetris3d.shapes.ObjectS;
+import com.trippleit.android.tetris3d.shapes.ObjectT;
+import com.trippleit.android.tetris3d.shapes.ObjectZ;
 
 import android.opengl.GLU;
 
@@ -47,7 +53,9 @@ public class OpenGlRenderer extends AbstractOpenGlRenderer {
 				for (int k = 0; k < GameStatus.getGameHeight(); k++)
 					if (GameStatus.getGameBoolMatrix()[i][j][k]) {
 						gl.glPushMatrix();
-						Cube ccc = new Cube();
+						//Cube ccc = new Cube();
+						ObjectZ ccc = new ObjectZ();
+						
 						gl.glTranslatef(i, j, k);
 						ccc.draw(gl);
 						gl.glPopMatrix();
@@ -55,7 +63,9 @@ public class OpenGlRenderer extends AbstractOpenGlRenderer {
 	}
 
 	private void newShpe() {
-		GameStatus.setCurrentObject(new Cube());
+		//GameStatus.setCurrentObject(new Cube());
+		GameStatus.setCurrentObject(new ObjectZ());
+		
 		GameStatus.setCurrentPosition(0, 0, GameStatus.getGameHeight());
 	}
 
