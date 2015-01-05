@@ -17,15 +17,24 @@ public class Cube extends AbstractDraw implements IShape {
 	private FloatBuffer vertexBuffer;
 
 	private ShortBuffer indexBuffer;
-
-	public Cube() {
+	
+	private FloatBuffer colorBuffer;
+	
+	public Cube(){
 		vertexBuffer = floatToFloatBuffer(vertices);
 		indexBuffer = shortToShortBuffer(indices);
+	}
+	
+	public Cube(float colors[]){
+		vertexBuffer = floatToFloatBuffer(vertices);
+		indexBuffer = shortToShortBuffer(indices);
+		colorBuffer = floatToFloatBuffer(colors);
 	}
 
 	@Override
 	public void draw(GL10 gl) {
 		draw(gl, vertexBuffer, indexBuffer, indices);
+		//draw(gl, vertexBuffer, indexBuffer, indices, colorBuffer);	
 	}
 
 }

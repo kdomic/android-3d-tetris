@@ -54,7 +54,7 @@ public class OpenGlRenderer extends AbstractOpenGlRenderer {
 					if (GameStatus.getGameBoolMatrix()[i][j][k]) {
 						gl.glPushMatrix();
 						//Cube ccc = new Cube();
-						ObjectZ ccc = new ObjectZ();
+						ObjectC ccc = new ObjectC();
 						
 						gl.glTranslatef(i, j, k);
 						ccc.draw(gl);
@@ -64,7 +64,7 @@ public class OpenGlRenderer extends AbstractOpenGlRenderer {
 
 	private void newShpe() {
 		//GameStatus.setCurrentObject(new Cube());
-		GameStatus.setCurrentObject(new ObjectZ());
+		GameStatus.setCurrentObject(new ObjectC());
 		
 		GameStatus.setCurrentPosition(0, 0, GameStatus.getGameHeight());
 	}
