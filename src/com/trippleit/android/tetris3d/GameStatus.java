@@ -3,6 +3,7 @@ package com.trippleit.android.tetris3d;
 import com.trippleit.android.tetris3d.shapes.IShape;
 
 import android.content.Context;
+import android.util.Log;
 
 public class GameStatus {
 
@@ -11,17 +12,24 @@ public class GameStatus {
 
 	private static int gameHeight;
 	private static int gridSize;
+	private static int startX,startY;
 
 	private static IShape currentObject;
 	private static int currentObjectX, currentObjectY, currentObjectZ;
 
 	private static boolean gameBoolMatrix[][][];
+	private static String gameColorMatrix[][][];
 
+	private static boolean end;	
+	
 	public static void init(Context c) {
 		gameHeight = 10;
 		gridSize = 5;
 		restartGameBoolMatrix();
 		setCamera(-65, 10);
+		end = false;
+		startX = 2;
+		startY = 2;
 	}
 
 	/**
@@ -37,10 +45,12 @@ public class GameStatus {
 		GameStatus.cameraH = h;
 		calculateCamera();
 	}
-	
-	private static void calculateCamera(){
-		GameStatus.cameraX = 15 * (float) Math.cos(Math.toRadians(GameStatus.cameraR));
-		GameStatus.cameraY = 15 * (float) Math.sin(Math.toRadians(GameStatus.cameraR));
+
+	private static void calculateCamera() {
+		GameStatus.cameraX = 15 * (float) Math.cos(Math
+				.toRadians(GameStatus.cameraR));
+		GameStatus.cameraY = 15 * (float) Math.sin(Math
+				.toRadians(GameStatus.cameraR));
 		GameStatus.cameraZ = GameStatus.cameraH;
 	}
 
@@ -57,7 +67,7 @@ public class GameStatus {
 	public static float getCameraZ() {
 		calculateCamera();
 		return cameraZ;
-	}		
+	}
 
 	public static float getCameraR() {
 		return cameraR;
@@ -94,14 +104,25 @@ public class GameStatus {
 
 	private static void restartGameBoolMatrix() {
 		gameBoolMatrix = new boolean[gridSize][gridSize][gameHeight];
+		gameColorMatrix = new String[gridSize][gridSize][gameHeight];
 		for (int i = 0; i < gridSize; i++)
 			for (int j = 0; j < gridSize; j++)
-				for (int k = 0; k < gameHeight; k++)
+				for (int k = 0; k < gameHeight; k++) {
 					gameBoolMatrix[i][j][k] = false;
+					gameColorMatrix[i][j][k] = "#000000";
+				}
 	}
 
 	public static boolean[][][] getGameBoolMatrix() {
 		return gameBoolMatrix;
+	}
+
+	public static String[][][] getGameColorMatrix() {
+		return gameColorMatrix;
+	}
+
+	public static void setGameColorMatrix(String[][][] gameColorMatrix) {
+		GameStatus.gameColorMatrix = gameColorMatrix;
 	}
 
 	public static int getGridSize() {
@@ -126,8 +147,10 @@ public class GameStatus {
 		currentObjectZ = z;
 	}
 
-	public static boolean setCurrentXPositionPos() {
-		if (currentObjectX + 1 < gridSize) {
+	public static boolean setCurrentXPositionPos() {		
+		// +1 zato što se želi pomaknuti objekt;
+		//  -1 zato što je nulto indeksiranje pa objekt treba smanjizi za 1
+		if (currentObjectX + currentObject.getXsize() - 1 + 1 < gridSize) {
 			currentObjectX++;
 			return true;
 		}
@@ -143,7 +166,9 @@ public class GameStatus {
 	}
 
 	public static boolean setCurrentYPositionPos() {
-		if (currentObjectY + 1 < gridSize) {
+		// +1 zato što se želi pomaknuti objekt;
+		//  -1 zato što je nulto indeksiranje pa objekt treba smanjizi za 1
+		if (currentObjectY + currentObject.getYsize() - 1 + 1 < gridSize) {
 			currentObjectY++;
 			return true;
 		}
@@ -162,15 +187,34 @@ public class GameStatus {
 		if (currentObjectZ <= 0) {
 			return false;
 		}
-		if (gameBoolMatrix[currentObjectX][currentObjectY][currentObjectZ - 1] == true) {
-			return false;
-		}
+
+		for (int i = 0; i < currentObject.getObjectMatrix().length; i++)
+			for (int j = 0; j < currentObject.getObjectMatrix().length; j++)
+				for (int k = 0; k < currentObject.getObjectMatrix().length; k++)
+					if (currentObject.getObjectMatrix()[i][j][k] == true)
+						if (gameBoolMatrix[i + currentObjectX][j
+								+ currentObjectY][currentObjectZ - 1] == true) {
+							if (k != 0)
+								currentObjectZ--; // ukoliko kolizija nije na
+													// prvoj razini treba
+													// dopustiti još jedan drop
+							return false;
+						}
+
 		currentObjectZ--;
 		return true;
 	}
 
 	public static void savePositionToBoolMatrix() {
-		gameBoolMatrix[currentObjectX][currentObjectY][currentObjectZ] = true;
+		for (int i = 0; i < currentObject.getObjectMatrix().length; i++)
+			for (int j = 0; j < currentObject.getObjectMatrix().length; j++)
+				for (int k = 0; k < currentObject.getObjectMatrix().length && k<gameHeight; k++)
+					if ((k + currentObjectZ)<gameHeight && currentObject.getObjectMatrix()[i][j][k] == true) {
+						gameBoolMatrix[i + currentObjectX][j + currentObjectY][k
+								+ currentObjectZ] = true;
+						gameColorMatrix[i + currentObjectX][j + currentObjectY][k
+								+ currentObjectZ] = currentObject.getColor();
+					}
 	}
 
 	public static int getCurrentObjectX() {
@@ -205,4 +249,32 @@ public class GameStatus {
 		GameStatus.gameHeight = gameHeight;
 	}
 
+	public static boolean isEnd() {
+		return end;
+	}
+	
+	public static boolean checkEnd() {
+		end = gameBoolMatrix[startX][startY][gameHeight-1];
+		if(end)
+			Log.d("Kruno", "---END---");
+		return end;
+	}
+	
+
+	public static int getStartX() {
+		return startX;
+	}
+
+	public static void setStartX(int startX) {
+		GameStatus.startX = startX;
+	}
+
+	public static int getStartY() {
+		return startY;
+	}
+
+	public static void setStartY(int startY) {
+		GameStatus.startY = startY;
+	}		
+		
 }

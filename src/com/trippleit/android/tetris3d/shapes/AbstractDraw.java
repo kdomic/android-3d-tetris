@@ -90,8 +90,8 @@ public abstract class AbstractDraw {
 		indexBuffer.position(0);
 		return indexBuffer;
 	}
-	
-	public float[] convertColor(String color, int colorArrayLength){
+
+	public float[] convertColor(String color, int colorArrayLength) {
 		float colors[] = new float[colorArrayLength];
 		float cR = Integer.valueOf(color.substring(1, 3), 16) / 255.0f;
 		float cG = Integer.valueOf(color.substring(3, 5), 16) / 255.0f;
@@ -105,6 +105,49 @@ public abstract class AbstractDraw {
 		}
 		return colors;
 	}
-	
+
+	public boolean[][][] createFalsMatrix(int n) {
+		boolean objectMatrix[][][] = new boolean[n][n][n];
+		for (int i = 0; i < n; i++)
+			for (int j = 0; j < n; j++)
+				for (int k = 0; k < n; k++)
+					objectMatrix[i][j][k] = false;
+		return objectMatrix;
+
+	}
+
+	public int getXsize(boolean[][][] matrix) {
+		int object_x_size = 0;
+		for (int i = 0; i < matrix.length; i++) {
+			boolean ok = false;
+			for (int j = 0; j < matrix.length; j++) {
+				for (int k = 0; k < matrix.length; k++) {
+					if (matrix[i][j][k] == true)
+						ok = true;
+				}
+			}
+			if (ok) {
+				object_x_size++;
+			}
+		}
+		return object_x_size;
+	}
+
+	public int getYsize(boolean[][][] matrix) {
+		int object_y_size = 0;
+		for (int j = 0; j < matrix.length; j++) {
+			boolean ok = false;
+			for (int i = 0; i < matrix.length; i++) {
+				for (int k = 0; k < matrix.length; k++) {
+					if (matrix[i][j][k] == true)
+						ok = true;
+				}
+			}
+			if (ok) {
+				object_y_size++;
+			}
+		}
+		return object_y_size;
+	}
 
 }

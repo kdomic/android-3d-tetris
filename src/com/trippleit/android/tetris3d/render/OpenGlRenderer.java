@@ -1,5 +1,7 @@
 package com.trippleit.android.tetris3d.render;
 
+import java.util.Random;
+
 import javax.microedition.khronos.opengles.GL10;
 
 import com.trippleit.android.tetris3d.GameStatus;
@@ -15,6 +17,7 @@ import com.trippleit.android.tetris3d.shapes.ObjectT;
 import com.trippleit.android.tetris3d.shapes.ObjectZ;
 
 import android.opengl.GLU;
+import android.util.Log;
 
 public class OpenGlRenderer extends AbstractOpenGlRenderer {
 
@@ -34,7 +37,10 @@ public class OpenGlRenderer extends AbstractOpenGlRenderer {
 		}
 
 		if (getOneSec() == 0) {
-			dropDown();
+			if(GameStatus.isEnd()==false){
+				Log.d("Kruno","dropDown()");
+				dropDown();
+			}
 		}
 
 		printAll(gl);
@@ -53,9 +59,8 @@ public class OpenGlRenderer extends AbstractOpenGlRenderer {
 				for (int k = 0; k < GameStatus.getGameHeight(); k++)
 					if (GameStatus.getGameBoolMatrix()[i][j][k]) {
 						gl.glPushMatrix();
-						Cube ccc = new Cube();
-						// ObjectC ccc = new ObjectC();
-
+						Cube ccc = new Cube(
+								GameStatus.getGameColorMatrix()[i][j][k]);
 						gl.glTranslatef(i, j, k);
 						ccc.draw(gl);
 						gl.glPopMatrix();
@@ -63,8 +68,8 @@ public class OpenGlRenderer extends AbstractOpenGlRenderer {
 	}
 
 	private void newShpe() {
-		GameStatus.setCurrentObject(chooseObject(3));
-		GameStatus.setCurrentPosition(0, 0, GameStatus.getGameHeight());
+		GameStatus.setCurrentObject(chooseObject(randInt(1, 1)));
+		GameStatus.setCurrentPosition(GameStatus.getStartX(), GameStatus.getStartY(), GameStatus.getGameHeight());
 	}
 
 	private IShape chooseObject(int shapeId) {
@@ -102,8 +107,17 @@ public class OpenGlRenderer extends AbstractOpenGlRenderer {
 		boolean ret = GameStatus.setCurrentObjectPositionDown();
 		if (!ret) {
 			GameStatus.savePositionToBoolMatrix();
-			newShpe();
+			if (GameStatus.checkEnd() == false) {
+				Log.d("Kruno","newShpe()");
+				newShpe();
+			}
 		}
+	}
+
+	public static int randInt(int min, int max) {
+		Random rand = new Random();
+		int randomNum = rand.nextInt((max - min) + 1) + min;
+		return randomNum;
 	}
 
 }

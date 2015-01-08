@@ -72,4 +72,27 @@ public class Grid extends AbstractDraw implements IShape {
 		gl.glDisableClientState(GL10.GL_VERTEX_ARRAY);
 	}
 
+	@Override
+	public boolean[][][] getObjectMatrix() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String getColor() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public int getXsize() {
+		return 0;
+	}
+
+	@Override
+	public int getYsize() {
+		return 0;
+	}
+
 }
+

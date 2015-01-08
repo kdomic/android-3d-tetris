@@ -7,6 +7,10 @@ import javax.microedition.khronos.opengles.GL10;
 
 public class Cube extends AbstractDraw implements IShape {
 
+	String color = "#ffffff";
+
+	boolean objectMatrix[][][];
+	
 	private float vertices[] = { 0.0f, 0.0f, 0.0f, // 0
 			1.0f, 0.0f, 0.0f, // 1
 			1.0f, 1.0f, 0.0f, // 2
@@ -16,7 +20,7 @@ public class Cube extends AbstractDraw implements IShape {
 			1.0f, 1.0f, 1.0f, // 6
 			0.0f, 1.0f, 1.0f }; // 7
 
-	private short[] indices = { 0, 1, 3, 3, 1, 2, 4, 5, 7, 7, 5, 6, 0, 1, 5, 5,
+	private short[] indices = { 3, 1, 0, 3, 2, 1, 4, 5, 7, 7, 5, 6, 0, 1, 5, 5,
 			4, 0, 6, 2, 3, 7, 6, 3, 1, 2, 5, 6, 5, 2, 4, 3, 0, 3, 4, 7 };
 	private short[] lineIndices = { 0, 1, 1, 2, 2, 3, 3, 0, 4, 5, 5, 6, 6, 7,
 			7, 4, 0, 4, 1, 5, 2, 6, 3, 7 };
@@ -41,12 +45,14 @@ public class Cube extends AbstractDraw implements IShape {
 				+ vertices.length / 3));
 	}
 
-	private void init() {
+	private void init() {		
 		vertexBuffer = floatToFloatBuffer(vertices);
 		indexBuffer = shortToShortBuffer(indices);
 		lineIndexBuffer = shortToShortBuffer(lineIndices);
 		colorLineBuffer = floatToFloatBuffer(convertColor(lineColor,
 				vertices.length + vertices.length / 3));
+		objectMatrix = createFalsMatrix(1);
+		objectMatrix[0][0][0] = true;
 	}
 
 	@Override
@@ -57,6 +63,26 @@ public class Cube extends AbstractDraw implements IShape {
 			draw(gl, vertexBuffer, indexBuffer, indices, colorBuffer);
 		drawLines(gl, vertexBuffer, lineIndexBuffer, lineIndices,
 				colorLineBuffer);
+	}
+
+	@Override
+	public boolean[][][] getObjectMatrix() {
+		return objectMatrix;
+	}
+
+	@Override
+	public String getColor() {
+		return color;
+	}
+
+	@Override
+	public int getXsize() {
+		return getXsize(objectMatrix);
+	}
+
+	@Override
+	public int getYsize() {
+		return getYsize(objectMatrix);
 	}
 
 }
