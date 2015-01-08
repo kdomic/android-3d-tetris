@@ -53,9 +53,9 @@ public class OpenGlRenderer extends AbstractOpenGlRenderer {
 				for (int k = 0; k < GameStatus.getGameHeight(); k++)
 					if (GameStatus.getGameBoolMatrix()[i][j][k]) {
 						gl.glPushMatrix();
-						//Cube ccc = new Cube();
-						ObjectC ccc = new ObjectC();
-						
+						Cube ccc = new Cube();
+						// ObjectC ccc = new ObjectC();
+
 						gl.glTranslatef(i, j, k);
 						ccc.draw(gl);
 						gl.glPopMatrix();
@@ -63,10 +63,39 @@ public class OpenGlRenderer extends AbstractOpenGlRenderer {
 	}
 
 	private void newShpe() {
-		//GameStatus.setCurrentObject(new Cube());
-		GameStatus.setCurrentObject(new ObjectC());
-		
+		GameStatus.setCurrentObject(chooseObject(3));
 		GameStatus.setCurrentPosition(0, 0, GameStatus.getGameHeight());
+	}
+
+	private IShape chooseObject(int shapeId) {
+		switch (shapeId) {
+		case 0:
+		case 'C':
+		case 'c':
+			return new ObjectC();
+		case 1:
+		case 'I':
+		case 'i':
+			return new ObjectI();
+		case 2:
+		case 'L':
+		case 'l':
+			return new ObjectL();
+		case 3:
+		case 'S':
+		case 's':
+			return new ObjectS();
+		case 4:
+		case 'T':
+		case 't':
+			return new ObjectT();
+		case 5:
+		case 'Z':
+		case 'z':
+			return new ObjectZ();
+		}
+
+		return new Cube();
 	}
 
 	private void dropDown() {

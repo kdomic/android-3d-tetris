@@ -35,19 +35,40 @@ public abstract class AbstractDraw {
 
 	public void draw(GL10 gl, FloatBuffer vertexBuffer,
 			ShortBuffer indexBuffer, short[] indices, FloatBuffer colorBuffer) {
-		gl.glTranslatef(-0.05f, -0.05f, 0f);
+
+		gl.glFrontFace(GL10.GL_CCW);
+		gl.glEnable(GL10.GL_CULL_FACE);
+		gl.glCullFace(GL10.GL_BACK);
+
+		gl.glEnableClientState(GL10.GL_VERTEX_ARRAY);
+		gl.glEnableClientState(GL10.GL_COLOR_ARRAY);
+		gl.glVertexPointer(3, GL10.GL_FLOAT, 0, vertexBuffer);
+		gl.glColorPointer(4, GL10.GL_FLOAT, 0, colorBuffer);
+
+		gl.glDrawElements(GL10.GL_TRIANGLES, indices.length,
+				GL10.GL_UNSIGNED_SHORT, indexBuffer);
+
+		gl.glDisableClientState(GL10.GL_VERTEX_ARRAY);
+		gl.glDisableClientState(GL10.GL_COLOR_ARRAY);
+		gl.glDisable(GL10.GL_CULL_FACE);
+
+	}
+
+	public void drawLines(GL10 gl, FloatBuffer vertexBuffer,
+			ShortBuffer indexBuffer, short[] indices, FloatBuffer colorBuffer) {
 		gl.glEnableClientState(GL10.GL_VERTEX_ARRAY);
 		gl.glEnableClientState(GL10.GL_COLOR_ARRAY);
 
 		gl.glVertexPointer(3, GL10.GL_FLOAT, 0, vertexBuffer);
 		gl.glColorPointer(4, GL10.GL_FLOAT, 0, colorBuffer);
 
+		gl.glLineWidth(1);
 		gl.glDrawElements(GL10.GL_LINES, indices.length,
 				GL10.GL_UNSIGNED_SHORT, indexBuffer);
 
 		gl.glDisableClientState(GL10.GL_VERTEX_ARRAY);
 		gl.glDisableClientState(GL10.GL_COLOR_ARRAY);
-		gl.glTranslatef(0.05f, 0.05f, 0f);
+
 	}
 
 	public FloatBuffer floatToFloatBuffer(float[] vertices) {
@@ -69,5 +90,21 @@ public abstract class AbstractDraw {
 		indexBuffer.position(0);
 		return indexBuffer;
 	}
+	
+	public float[] convertColor(String color, int colorArrayLength){
+		float colors[] = new float[colorArrayLength];
+		float cR = Integer.valueOf(color.substring(1, 3), 16) / 255.0f;
+		float cG = Integer.valueOf(color.substring(3, 5), 16) / 255.0f;
+		float cB = Integer.valueOf(color.substring(5, 7), 16) / 255.0f;
+
+		for (int i = 0; i < colorArrayLength; i += 4) {
+			colors[i] = cR;
+			colors[i + 1] = cG;
+			colors[i + 2] = cB;
+			colors[i + 3] = 1.0f;
+		}
+		return colors;
+	}
+	
 
 }

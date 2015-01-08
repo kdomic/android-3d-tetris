@@ -4,24 +4,26 @@ import javax.microedition.khronos.opengles.GL10;
 
 public class ObjectC extends AbstractDraw implements IShape {
 
-	public ObjectC(){
+	String color = "#AA3939";
+
+	public ObjectC() {
 	}
 
 	@Override
 	public void draw(GL10 gl) {
 		gl.glPushMatrix();
-		Cube c1 = new Cube();
+		Cube c1 = new Cube(color);
 		c1.draw(gl);
-		
-		Cube c2 = new Cube();
+
+		Cube c2 = new Cube(color);
 		gl.glTranslatef(1, 0, 0);
 		c2.draw(gl);
-		
-		Cube c3 = new Cube();
+
+		Cube c3 = new Cube(color);
 		gl.glTranslatef(0, 1, 0);
 		c3.draw(gl);
-		
-		Cube c4 = new Cube();
+
+		Cube c4 = new Cube(color);
 		gl.glTranslatef(-1, 0, 0);
 		c4.draw(gl);
 		gl.glPopMatrix();
