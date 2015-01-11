@@ -8,6 +8,21 @@ import java.nio.ShortBuffer;
 import javax.microedition.khronos.opengles.GL10;
 
 public abstract class AbstractDraw {
+	
+	//NOVO (potrebno testirat)
+	public void drawObject(GL10 gl, boolean objectMatrix[][][], String color){
+		gl.glPushMatrix();
+		Cube c = new Cube(color);
+		for (int i = 0; i < objectMatrix.length; i++)
+			for (int j = 0; j < objectMatrix.length; j++)
+				for (int k = 0; k < objectMatrix.length; k++)
+					if(objectMatrix[i][j][k] = true){
+						gl.glTranslatef(i, j, k);
+						c.draw(gl);
+					}
+		gl.glPopMatrix();
+	}
+	
 	public void draw(GL10 gl, FloatBuffer vertexBuffer,
 			ShortBuffer indexBuffer, short[] indices) {
 		// Counter-clockwise winding.
