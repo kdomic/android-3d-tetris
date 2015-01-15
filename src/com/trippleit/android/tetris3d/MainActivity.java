@@ -29,7 +29,7 @@ public class MainActivity extends Activity {
 		glView.setFocusableInTouchMode(true);
 		
 		GameStatus.init(this);	
-		glView.setOnTouchListener(new SwipeControls(this));
+		glView.setOnTouchListener(new SwipeControls(this));		
 		
 		Button b1 = (Button) findViewById(R.id.btnUp);
 		Button b2 = (Button) findViewById(R.id.btnDown);

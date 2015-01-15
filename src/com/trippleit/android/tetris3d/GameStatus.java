@@ -1,5 +1,7 @@
 package com.trippleit.android.tetris3d;
 
+import java.util.ArrayList;
+
 import com.trippleit.android.tetris3d.shapes.IShape;
 
 import android.content.Context;
@@ -12,7 +14,7 @@ public class GameStatus {
 
 	private static int gameHeight;
 	private static int gridSize;
-	private static int startX,startY;
+	private static int startX, startY;
 
 	private static IShape currentObject;
 	private static int currentObjectX, currentObjectY, currentObjectZ;
@@ -20,8 +22,8 @@ public class GameStatus {
 	private static boolean gameBoolMatrix[][][];
 	private static String gameColorMatrix[][][];
 
-	private static boolean end;	
-	
+	private static boolean end;
+
 	public static void init(Context c) {
 		gameHeight = 10;
 		gridSize = 5;
@@ -103,11 +105,14 @@ public class GameStatus {
 	}
 
 	private static void restartGameBoolMatrix() {
-		gameBoolMatrix = new boolean[gridSize][gridSize][gameHeight];
-		gameColorMatrix = new String[gridSize][gridSize][gameHeight];
+		int objectBuffer = 5;
+		gameBoolMatrix = new boolean[gridSize][gridSize][gameHeight
+				+ objectBuffer];
+		gameColorMatrix = new String[gridSize][gridSize][gameHeight
+				+ objectBuffer];
 		for (int i = 0; i < gridSize; i++)
 			for (int j = 0; j < gridSize; j++)
-				for (int k = 0; k < gameHeight; k++) {
+				for (int k = 0; k < gameHeight + objectBuffer; k++) {
 					gameBoolMatrix[i][j][k] = false;
 					gameColorMatrix[i][j][k] = "#000000";
 				}
@@ -147,40 +152,82 @@ public class GameStatus {
 		currentObjectZ = z;
 	}
 
-	public static boolean setCurrentXPositionPos() {		
+	public static boolean setCurrentXPositionPos() {
+		if (GameStatus.isEnd())
+			return false;
 		// +1 zato što se želi pomaknuti objekt;
-		//  -1 zato što je nulto indeksiranje pa objekt treba smanjizi za 1
+		// -1 zato što je nulto indeksiranje pa objekt treba smanjizi za 1
 		if (currentObjectX + currentObject.getXsize() - 1 + 1 < gridSize) {
-			currentObjectX++;
+			if (isAvailable(1))
+				currentObjectX++;
 			return true;
 		}
 		return false;
 	}
 
 	public static boolean setCurrentXPositionNeg() {
+		if (GameStatus.isEnd())
+			return false;
 		if (currentObjectX - 1 >= 0) {
-			currentObjectX--;
+			if (isAvailable(2))
+				currentObjectX--;
 			return true;
 		}
 		return false;
 	}
 
 	public static boolean setCurrentYPositionPos() {
+		if (GameStatus.isEnd())
+			return false;
 		// +1 zato što se želi pomaknuti objekt;
-		//  -1 zato što je nulto indeksiranje pa objekt treba smanjizi za 1
+		// -1 zato što je nulto indeksiranje pa objekt treba smanjizi za 1
 		if (currentObjectY + currentObject.getYsize() - 1 + 1 < gridSize) {
-			currentObjectY++;
+			if (isAvailable(3))
+				currentObjectY++;
 			return true;
 		}
 		return false;
 	}
 
 	public static boolean setCurrentYPositionNeg() {
+		if (GameStatus.isEnd())
+			return false;
 		if (currentObjectY - 1 >= 0) {
-			currentObjectY--;
+			if (isAvailable(4))
+				currentObjectY--;
 			return true;
 		}
 		return false;
+	}
+
+	public static boolean isAvailable(int direction) {
+		for (int i = 0; i < currentObject.getObjectMatrix().length; i++)
+			for (int j = 0; j < currentObject.getObjectMatrix().length; j++)
+				for (int k = 0; k < currentObject.getObjectMatrix().length; k++)
+					if (currentObject.getObjectMatrix()[i][j][k] == true)
+						switch (direction) {
+						case 1:
+							if (gameBoolMatrix[i + currentObjectX + 1][j
+									+ currentObjectY][k + currentObjectZ] == true)
+								return false;
+							break;
+						case 2:
+							if (gameBoolMatrix[i + currentObjectX - 1][j
+									+ currentObjectY][k + currentObjectZ] == true)
+								return false;
+							break;
+						case 3:
+							if (gameBoolMatrix[i + currentObjectX][j
+									+ currentObjectY + 1][k + currentObjectZ] == true)
+								return false;
+							break;
+						case 4:
+							if (gameBoolMatrix[i + currentObjectX][j
+									+ currentObjectY - 1][k + currentObjectZ] == true)
+								return false;
+							break;
+						}
+		return true;
 	}
 
 	public static boolean setCurrentObjectPositionDown() {
@@ -208,8 +255,10 @@ public class GameStatus {
 	public static void savePositionToBoolMatrix() {
 		for (int i = 0; i < currentObject.getObjectMatrix().length; i++)
 			for (int j = 0; j < currentObject.getObjectMatrix().length; j++)
-				for (int k = 0; k < currentObject.getObjectMatrix().length && k<gameHeight; k++)
-					if ((k + currentObjectZ)<gameHeight && currentObject.getObjectMatrix()[i][j][k] == true) {
+				for (int k = 0; k < currentObject.getObjectMatrix().length
+						&& k < gameHeight; k++)
+					if ((k + currentObjectZ) < gameHeight
+							&& currentObject.getObjectMatrix()[i][j][k] == true) {
 						gameBoolMatrix[i + currentObjectX][j + currentObjectY][k
 								+ currentObjectZ] = true;
 						gameColorMatrix[i + currentObjectX][j + currentObjectY][k
@@ -252,14 +301,13 @@ public class GameStatus {
 	public static boolean isEnd() {
 		return end;
 	}
-	
+
 	public static boolean checkEnd() {
-		end = gameBoolMatrix[startX][startY][gameHeight-1];
-		if(end)
+		end = gameBoolMatrix[startX][startY][gameHeight - 1];
+		if (end)
 			Log.d("Kruno", "---END---");
 		return end;
 	}
-	
 
 	public static int getStartX() {
 		return startX;
@@ -275,6 +323,38 @@ public class GameStatus {
 
 	public static void setStartY(int startY) {
 		GameStatus.startY = startY;
-	}		
-		
+	}
+
+	public static boolean removeFullRows() {
+		ArrayList<Integer> rowsToRemove = new ArrayList<Integer>();
+		for (int k = gameHeight; k >= 0; k--) {
+			boolean remove = true;
+			for (int i = 0; i < gridSize; i++)
+				for (int j = 0; j < gridSize; j++)
+					if (gameBoolMatrix[i][j][k] == false)
+						remove = false;
+			if (remove)
+				rowsToRemove.add(k);
+		}
+		if (!rowsToRemove.isEmpty()) {
+			removeRows(rowsToRemove);
+			return true;
+		}
+		return false;
+	}
+
+	private static void removeRows(ArrayList<Integer> rowsToRemove) {
+		for (Integer x : rowsToRemove) {
+			for (int k = x; k < gameHeight; k++)
+				for (int i = 0; i < gridSize; i++)
+					for (int j = 0; j < gridSize; j++)
+						if (x == gameHeight - 1){
+							gameBoolMatrix[i][j][k] = false;
+							gameColorMatrix[i][j][k] = "";
+						}else{
+							gameBoolMatrix[i][j][k] = gameBoolMatrix[i][j][k + 1];
+							gameColorMatrix[i][j][k] = gameColorMatrix[i][j][k + 1];
+						}
+		}
+	}
 }

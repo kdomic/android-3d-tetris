@@ -17,42 +17,41 @@ import com.trippleit.android.tetris3d.shapes.ObjectT;
 import com.trippleit.android.tetris3d.shapes.ObjectZ;
 
 import android.opengl.GLU;
-import android.util.Log;
 
 public class OpenGlRenderer extends AbstractOpenGlRenderer {
 
 	@Override
 	public void onDrawFrame(GL10 gl, boolean firstDraw) {
-		GLU.gluLookAt(gl, GameStatus.getCameraX(), GameStatus.getCameraY(),
-				GameStatus.getCameraZ(), 0, 0, 0, 0, 0, 1);
+		GLU.gluLookAt(gl, GameStatus.getCameraX(), GameStatus.getCameraY(), GameStatus.getCameraZ(), 0, 0, 0, 0, 0, 1);
+		
+		new Coords(GameStatus.getGridSize(),GameStatus.getGameHeight()).draw(gl);
+		new Grid(GameStatus.getGridSize()).draw(gl);
 
-		IShape coords = new Coords();
-		coords.draw(gl);
+		if (firstDraw) newShpe();		
 
-		IShape grid = new Grid(GameStatus.getGridSize());
-		grid.draw(gl);
-
-		if (firstDraw) {
-			newShpe();
-		}
-
-		if (getOneSec() == 0) {
-			if(GameStatus.isEnd()==false){				
-				dropDown();
-			}
-		}
-
-		printAll(gl);
-
-		gl.glPushMatrix();
-		gl.glTranslatef(GameStatus.getCurrentObjectX(),
-				GameStatus.getCurrentObjectY(), GameStatus.getCurrentObjectZ());
-		GameStatus.getCurrentObject().draw(gl);
-		gl.glPopMatrix();
-
+		dropDown();
+		removeFullRows();
+		printAllObjects(gl);
+		printCurrentObject(gl);
 	}
 
-	private void printAll(GL10 gl) {
+	private void dropDown() {
+		if(GameStatus.isEnd()) return;
+		if (getOneSec() != 0) return;
+		boolean ret = GameStatus.setCurrentObjectPositionDown();
+		if (!ret) {
+			GameStatus.savePositionToBoolMatrix();
+			if (GameStatus.checkEnd() == false) {			
+				newShpe();
+			}
+		}
+	}
+	
+	private void removeFullRows() {
+		GameStatus.removeFullRows();
+	}
+	
+	private void printAllObjects(GL10 gl) {
 		for (int i = 0; i < GameStatus.getGridSize(); i++)
 			for (int j = 0; j < GameStatus.getGridSize(); j++)
 				for (int k = 0; k < GameStatus.getGameHeight(); k++)
@@ -65,10 +64,16 @@ public class OpenGlRenderer extends AbstractOpenGlRenderer {
 						gl.glPopMatrix();
 					}
 	}
+	
+	private void printCurrentObject(GL10 gl){
+		gl.glPushMatrix();
+			gl.glTranslatef(GameStatus.getCurrentObjectX(), GameStatus.getCurrentObjectY(), GameStatus.getCurrentObjectZ());
+			GameStatus.getCurrentObject().draw(gl);
+		gl.glPopMatrix();
+	}
 
 	private void newShpe() {
-		int objNum = randInt(0, 5);
-		Log.d("Kruno", objNum+"");
+		int objNum = randInt(0, 0);		
 		GameStatus.setCurrentObject(chooseObject(objNum));
 		GameStatus.setCurrentPosition(GameStatus.getStartX(), GameStatus.getStartY(), GameStatus.getGameHeight());
 	}
@@ -102,16 +107,6 @@ public class OpenGlRenderer extends AbstractOpenGlRenderer {
 		}
 
 		return new Cube();
-	}
-
-	private void dropDown() {
-		boolean ret = GameStatus.setCurrentObjectPositionDown();
-		if (!ret) {
-			GameStatus.savePositionToBoolMatrix();
-			if (GameStatus.checkEnd() == false) {			
-				newShpe();
-			}
-		}
 	}
 
 	public static int randInt(int min, int max) {
