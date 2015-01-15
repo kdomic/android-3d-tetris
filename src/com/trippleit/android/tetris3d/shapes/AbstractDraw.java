@@ -9,7 +9,6 @@ import javax.microedition.khronos.opengles.GL10;
 
 public abstract class AbstractDraw {
 	
-	//NOVO (potrebno testirat)
 	public void drawObject(GL10 gl, boolean objectMatrix[][][], String color){
 		gl.glPushMatrix();
 		Cube c = new Cube(color);
@@ -23,6 +22,39 @@ public abstract class AbstractDraw {
 						gl.glPopMatrix();
 					}
 		gl.glPopMatrix();
+	}
+	
+	public boolean[][][] rotateX(boolean objectMatrix[][][]){
+		boolean rotatedMatrix[][][] = createFalsMatrix(objectMatrix.length);
+		for (int i = 0; i < objectMatrix.length; i++)
+			for (int j = 0; j < objectMatrix.length; j++)
+				for (int k = 0; k < objectMatrix.length; k++){
+					//TODO modifikacija indeksa (fiksni indeks: j)
+					rotatedMatrix[i][j][k] = objectMatrix[i][j][k];				
+				}
+		return rotatedMatrix;
+	}
+	
+	public boolean[][][] rotateY(boolean objectMatrix[][][]){
+		boolean rotatedMatrix[][][] = createFalsMatrix(objectMatrix.length);
+		for (int i = 0; i < objectMatrix.length; i++)
+			for (int j = 0; j < objectMatrix.length; j++)
+				for (int k = 0; k < objectMatrix.length; k++){
+					//TODO modifikacija indeksa (fiksni indeks: i)
+					rotatedMatrix[i][j][k] = objectMatrix[i][j][k];				
+				}
+		return rotatedMatrix;
+	}
+	
+	public boolean[][][] rotateZ(boolean objectMatrix[][][]){
+		boolean rotatedMatrix[][][] = createFalsMatrix(objectMatrix.length);
+		for (int i = 0; i < objectMatrix.length; i++)
+			for (int j = 0; j < objectMatrix.length; j++)
+				for (int k = 0; k < objectMatrix.length; k++){
+					//TODO modifikacija indeksa (fiksni indeks: k)
+					rotatedMatrix[i][j][k] = objectMatrix[i][j][k];				
+				}
+		return rotatedMatrix;
 	}
 	
 	public void draw(GL10 gl, FloatBuffer vertexBuffer,
