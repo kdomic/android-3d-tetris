@@ -7,15 +7,17 @@ import java.nio.ShortBuffer;
 
 import javax.microedition.khronos.opengles.GL10;
 
+import com.trippleit.android.tetris3d.GameStatus;
+
 public abstract class AbstractDraw {
-	
-	public void drawObject(GL10 gl, boolean objectMatrix[][][], String color){
+
+	public void drawObject(GL10 gl, boolean objectMatrix[][][], String color) {
 		gl.glPushMatrix();
 		Cube c = new Cube(color);
 		for (int i = 0; i < objectMatrix.length; i++)
 			for (int j = 0; j < objectMatrix.length; j++)
 				for (int k = 0; k < objectMatrix.length; k++)
-					if(objectMatrix[i][j][k] == true){
+					if (objectMatrix[i][j][k] == true) {
 						gl.glPushMatrix();
 						gl.glTranslatef(i, j, k);
 						c.draw(gl);
@@ -23,39 +25,161 @@ public abstract class AbstractDraw {
 					}
 		gl.glPopMatrix();
 	}
-	
-	public boolean[][][] rotateX(boolean objectMatrix[][][]){
+
+	public boolean[][] rot(boolean[][] a) {
+		boolean rotatedMatrix[][] = new boolean[a.length][a.length];
+		for (int i = 0; i < a.length; i++)
+			for (int j = 0; j < a.length; j++)
+				rotatedMatrix[a.length - (j + 1)][i] = a[i][j];
+		return rotatedMatrix;
+	}
+
+	public boolean[][][] rotateX(boolean objectMatrix[][][]) {
+		if(GameStatus.getCurrentObjectX()+GameStatus.getCurrentObject().getZsize()>=GameStatus.getGridSize()){
+			return objectMatrix;
+		}
 		boolean rotatedMatrix[][][] = createFalsMatrix(objectMatrix.length);
-		for (int i = 0; i < objectMatrix.length; i++)
+		for (int j = 0; j < objectMatrix.length; j++) {
+			boolean temp[][] = new boolean[objectMatrix.length][objectMatrix.length];
+			for (int i = 0; i < objectMatrix.length; i++)
+				for (int k = 0; k < objectMatrix.length; k++)
+					temp[i][k] = objectMatrix[i][j][k];
+			temp = rot(temp);
+			for (int i = 0; i < objectMatrix.length; i++)
+				for (int k = 0; k < objectMatrix.length; k++)
+					rotatedMatrix[i][j][k] = temp[i][k];
+		}
+		return align(rotatedMatrix);
+	}
+
+	public boolean[][][] rotateY(boolean objectMatrix[][][]) {
+		if(GameStatus.getCurrentObjectY()+GameStatus.getCurrentObject().getZsize()>=GameStatus.getGridSize()){
+			return objectMatrix;
+		}
+		boolean rotatedMatrix[][][] = createFalsMatrix(objectMatrix.length);
+		for (int i = 0; i < objectMatrix.length; i++) {
+			boolean temp[][] = new boolean[objectMatrix.length][objectMatrix.length];
 			for (int j = 0; j < objectMatrix.length; j++)
-				for (int k = 0; k < objectMatrix.length; k++){
-					//TODO modifikacija indeksa (fiksni indeks: j)
-					rotatedMatrix[i][j][k] = objectMatrix[i][j][k];				
-				}
+				for (int k = 0; k < objectMatrix.length; k++)
+					temp[j][k] = objectMatrix[i][j][k];
+			temp = rot(temp);
+			for (int j = 0; j < objectMatrix.length; j++)
+				for (int k = 0; k < objectMatrix.length; k++)
+					rotatedMatrix[i][j][k] = temp[j][k];
+		}
+		return align(rotatedMatrix);
+	}
+
+	public boolean[][][] rotateZ(boolean objectMatrix[][][]) {
+		if(GameStatus.getCurrentObjectY()+GameStatus.getCurrentObject().getXsize()>GameStatus.getGridSize()){
+			return objectMatrix;
+		}
+		if(GameStatus.getCurrentObjectX()+GameStatus.getCurrentObject().getYsize()>GameStatus.getGridSize()){
+			return objectMatrix;
+		}				
+		boolean rotatedMatrix[][][] = createFalsMatrix(objectMatrix.length);
+		for (int k = 0; k < objectMatrix.length; k++) {
+			boolean temp[][] = new boolean[objectMatrix.length][objectMatrix.length];
+			for (int i = 0; i < objectMatrix.length; i++)
+				for (int j = 0; j < objectMatrix.length; j++)
+					temp[i][j] = objectMatrix[i][j][k];
+			temp = rot(temp);
+			for (int i = 0; i < objectMatrix.length; i++)
+				for (int j = 0; j < objectMatrix.length; j++)
+					rotatedMatrix[i][j][k] = temp[i][j];
+		}
+		return align(rotatedMatrix);
+	}
+
+	public boolean[][][] align(boolean rotatedMatrix[][][]) {
+		rotatedMatrix = alignI(rotatedMatrix);
+		rotatedMatrix = alignJ(rotatedMatrix);
+		rotatedMatrix = alignK(rotatedMatrix);		
 		return rotatedMatrix;
 	}
 	
-	public boolean[][][] rotateY(boolean objectMatrix[][][]){
-		boolean rotatedMatrix[][][] = createFalsMatrix(objectMatrix.length);
-		for (int i = 0; i < objectMatrix.length; i++)
-			for (int j = 0; j < objectMatrix.length; j++)
-				for (int k = 0; k < objectMatrix.length; k++){
-					//TODO modifikacija indeksa (fiksni indeks: i)
-					rotatedMatrix[i][j][k] = objectMatrix[i][j][k];				
-				}
+	public boolean[][][] alignI(boolean rotatedMatrix[][][]) {
+		int rNum = 0;
+		for (int i = 0; i < rotatedMatrix.length; i++) {
+			boolean remove = true;
+			for (int k = 0; k < rotatedMatrix.length; k++){
+				for (int j = 0; j < rotatedMatrix.length; j++)
+					if (rotatedMatrix[i][j][k] == true){
+						remove = false;
+						break;
+					}
+				if(remove==false) break;
+			}
+			if (remove) rNum++;
+			else break;
+		}
+		for (int i = rNum; i < rotatedMatrix.length; i++)
+			for (int k = 0; k < rotatedMatrix.length; k++)
+				for (int j = 0; j < rotatedMatrix.length; j++)
+					rotatedMatrix[i-rNum][j][k] = rotatedMatrix[i][j][k];
+		
+		for (int i = rotatedMatrix.length - 1; i > rotatedMatrix.length - 1 - rNum; i--)
+			for (int k = 0; k < rotatedMatrix.length; k++)
+				for (int j = 0; j < rotatedMatrix.length; j++)
+					rotatedMatrix[i][j][k] = false;
 		return rotatedMatrix;
 	}
 	
-	public boolean[][][] rotateZ(boolean objectMatrix[][][]){
-		boolean rotatedMatrix[][][] = createFalsMatrix(objectMatrix.length);
-		for (int i = 0; i < objectMatrix.length; i++)
-			for (int j = 0; j < objectMatrix.length; j++)
-				for (int k = 0; k < objectMatrix.length; k++){
-					//TODO modifikacija indeksa (fiksni indeks: k)
-					rotatedMatrix[i][j][k] = objectMatrix[i][j][k];				
-				}
+	public boolean[][][] alignJ(boolean rotatedMatrix[][][]) {
+		int rNum = 0;
+		for (int j = 0; j < rotatedMatrix.length; j++) {
+			boolean remove = true;
+			for (int i = 0; i < rotatedMatrix.length; i++)
+				for (int k = 0; k < rotatedMatrix.length; k++){				
+					if (rotatedMatrix[i][j][k] == true){
+						remove = false;
+						break;
+					}
+				if(remove==false) break;
+			}
+			if (remove) rNum++;
+			else break;
+		}
+		for (int j = rNum; j < rotatedMatrix.length; j++)
+			for (int i = 0; i < rotatedMatrix.length; i++)
+				for (int k = 0; k < rotatedMatrix.length; k++)
+					rotatedMatrix[i][j-rNum][k] = rotatedMatrix[i][j][k];
+		
+		for (int j = rotatedMatrix.length - 1; j > rotatedMatrix.length - 1 - rNum; j--)
+			for (int i = 0; i < rotatedMatrix.length; i++)
+				for (int k = 0; k < rotatedMatrix.length; k++)
+					rotatedMatrix[i][j][k] = false;
 		return rotatedMatrix;
 	}
+	
+	public boolean[][][] alignK(boolean rotatedMatrix[][][]) {					
+		int rNum = 0;
+		for (int k = 0; k < rotatedMatrix.length; k++) {
+			boolean remove = true;
+			for (int i = 0; i < rotatedMatrix.length; i++){
+				for (int j = 0; j < rotatedMatrix.length; j++)
+					if (rotatedMatrix[i][j][k] == true){
+						remove = false;
+						break;
+					}
+				if(remove==false) break;
+			}
+			if (remove) rNum++;
+			else break;
+		}
+		for (int k = rNum; k < rotatedMatrix.length; k++)
+			for (int i = 0; i < rotatedMatrix.length; i++)
+				for (int j = 0; j < rotatedMatrix.length; j++)
+					rotatedMatrix[i][j][k-rNum] = rotatedMatrix[i][j][k];
+		
+		for (int k = rotatedMatrix.length - 1; k > rotatedMatrix.length - 1 - rNum; k--)
+			for (int i = 0; i < rotatedMatrix.length; i++)
+				for (int j = 0; j < rotatedMatrix.length; j++)
+					rotatedMatrix[i][j][k] = false;
+
+		return rotatedMatrix;
+	}
+	
 	
 	public void draw(GL10 gl, FloatBuffer vertexBuffer,
 			ShortBuffer indexBuffer, short[] indices) {
@@ -197,6 +321,23 @@ public abstract class AbstractDraw {
 			}
 		}
 		return object_y_size;
+	}
+	
+	public int getZsize(boolean[][][] matrix) {
+		int object_z_size = 0;
+		for (int k = 0; k < matrix.length; k++) {
+			boolean ok = false;
+			for (int i = 0; i < matrix.length; i++) {
+				for (int j = 0; j < matrix.length; j++) {
+					if (matrix[i][j][k] == true)
+						ok = true;
+				}
+			}
+			if (ok) {
+				object_z_size++;
+			}
+		}
+		return object_z_size;
 	}
 
 }

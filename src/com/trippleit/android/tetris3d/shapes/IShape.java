@@ -9,4 +9,6 @@ public interface IShape {
 	public String getColor();
 	public int getXsize();
 	public int getYsize();
+	public int getZsize();
+	public void rotate(int axis);
 }

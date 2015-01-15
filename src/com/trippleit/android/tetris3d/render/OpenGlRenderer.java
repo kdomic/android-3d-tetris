@@ -28,7 +28,7 @@ public class OpenGlRenderer extends AbstractOpenGlRenderer {
 		new Grid(GameStatus.getGridSize()).draw(gl);
 
 		if (firstDraw) newShpe();		
-
+		
 		dropDown();
 		removeFullRows();
 		printAllObjects(gl);
@@ -39,6 +39,8 @@ public class OpenGlRenderer extends AbstractOpenGlRenderer {
 		if(GameStatus.isEnd()) return;
 		if (getOneSec() != 0) return;
 		boolean ret = GameStatus.setCurrentObjectPositionDown();
+		if(GameStatus.isDropFast()) 
+			while(GameStatus.setCurrentObjectPositionDown());
 		if (!ret) {
 			GameStatus.savePositionToBoolMatrix();
 			if (GameStatus.checkEnd() == false) {			
@@ -73,7 +75,7 @@ public class OpenGlRenderer extends AbstractOpenGlRenderer {
 	}
 
 	private void newShpe() {
-		int objNum = randInt(0, 0);		
+		int objNum = randInt(0, 5);		
 		GameStatus.setCurrentObject(chooseObject(objNum));
 		GameStatus.setCurrentPosition(GameStatus.getStartX(), GameStatus.getStartY(), GameStatus.getGameHeight());
 	}

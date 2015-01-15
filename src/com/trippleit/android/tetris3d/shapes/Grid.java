@@ -93,6 +93,16 @@ public class Grid extends AbstractDraw implements IShape {
 	public int getYsize() {
 		return 0;
 	}
+	
+	@Override
+	public int getZsize() {
+		return 0;
+	}
+	
+	@Override
+	public void rotate(int axis) {
+
+	}
 
 }
 

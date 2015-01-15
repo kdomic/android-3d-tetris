@@ -22,6 +22,7 @@ public class GameStatus {
 	private static boolean gameBoolMatrix[][][];
 	private static String gameColorMatrix[][][];
 
+	private static boolean dropFast;
 	private static boolean end;
 
 	public static void init(Context c) {
@@ -32,6 +33,7 @@ public class GameStatus {
 		end = false;
 		startX = 2;
 		startY = 2;
+		dropFast = false;
 	}
 
 	/**
@@ -323,6 +325,16 @@ public class GameStatus {
 
 	public static void setStartY(int startY) {
 		GameStatus.startY = startY;
+	}	
+
+	public static boolean isDropFast() {
+		boolean temp = dropFast;
+		dropFast = false;
+		return temp;
+	}
+
+	public static void setDropFast() {
+		GameStatus.dropFast = true;
 	}
 
 	public static boolean removeFullRows() {

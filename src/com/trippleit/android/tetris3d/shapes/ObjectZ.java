@@ -57,5 +57,25 @@ public class ObjectZ extends AbstractDraw implements IShape {
 	public int getYsize() {
 		return getYsize(objectMatrix);
 	}
+	
+	@Override
+	public int getZsize() {
+		return getZsize(objectMatrix);
+	}
+	
+	@Override
+	public void rotate(int axis) {
+		switch(axis){
+			case 1:
+			case 'x':
+				objectMatrix = rotateX(objectMatrix); break;
+			case 2:
+			case 'y':
+				objectMatrix = rotateY(objectMatrix); break;
+			case 3:
+			case 'z':
+				objectMatrix = rotateZ(objectMatrix); break;				
+		}
+	}
 
 }

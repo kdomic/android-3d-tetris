@@ -10,10 +10,7 @@ import android.view.View.OnTouchListener;
 
 public class SwipeControls implements OnTouchListener {
 
-	private Context c;
-
 	public SwipeControls(Context _c) {
-		this.c = _c;
 	}
 
 	public void onSwipeRight() {
@@ -40,6 +37,7 @@ public class SwipeControls implements OnTouchListener {
 	private Integer fingersCount = 0;
 	private float x1 = 0, y1 = 0;
 	private float x2 = 0, y2 = 0;
+	private long time = 0;
 
 	@SuppressLint("ClickableViewAccessibility")
 	@Override
@@ -49,47 +47,50 @@ public class SwipeControls implements OnTouchListener {
 
 		switch (action) {
 			case MotionEvent.ACTION_DOWN: {
-				//Log.d("Kruno", "Action Down1");
+				// Log.d("Kruno", "Action Down1");
 				x1 = event.getX();
 				y1 = event.getY();
 				fingersCount = event.getPointerCount();
+				time = System.currentTimeMillis();
 				break;
 			}
 			case MotionEvent.ACTION_MOVE: {
-				//Log.d("Kruno", "Action Move");
+				// Log.d("Kruno", "Action Move");
 				break;
 			}
 
 			case MotionEvent.ACTION_POINTER_DOWN: {
-				//Log.d("Kruno", "Pointer Down");
+				// Log.d("Kruno", "Pointer Down");
 				isMultiTouch = true;
 				fingersCount = event.getPointerCount();
+				if (fingersCount == 3)
+					GameStatus.getCurrentObject().rotate('z');
 				break;
 			}
 			case MotionEvent.ACTION_POINTER_UP: {
-				//Log.d("Kruno", "Pointer up");
-				fingersCount = event.getPointerCount();
+				// Log.d("Kruno", "Pointer up");
+				// fingersCount = event.getPointerCount();
 				break;
 			}
 			case MotionEvent.ACTION_UP: {
-				//Log.d("Kruno", "Action up1");
+				if((System.currentTimeMillis() - time)<100){
+					GameStatus.setDropFast();
+					return true;
+				}				
+				// Log.d("Kruno", "Action up1");
 				x2 = event.getX();
 				y2 = event.getY();
-				/*Log.d("Kruno", "a: " + isMultiTouch);
-				Log.d("Kruno", "a: " + fingersCount);
-				Log.d("Kruno", "[" + x1 + "," + y1 + "],[" + x2 + "," + y2
-						+ "]");*/
 				move(x1, y1, x2, y2, fingersCount);
 				isMultiTouch = false;
 				fingersCount = 0;
 				break;
 			}
 		}
-
 		return true;
 	}
 
-	private void move(float xFirst, float yFirst, float xSecond, float ySecond, int fCount) {
+	private void move(float xFirst, float yFirst, float xSecond, float ySecond,
+			int fCount) {
 		switch (fCount) {
 			case 1:
 				switch (detectDirection(xFirst, yFirst, xSecond, ySecond)) {
@@ -110,39 +111,43 @@ public class SwipeControls implements OnTouchListener {
 			case 2:
 				switch (detectDirection(xFirst, yFirst, xSecond, ySecond)) {
 					case 1:
-						Log.d("Kruno", "dd: onSwipeRight");
+						GameStatus.getCurrentObject().rotate('x');
 						break;
 					case 2:
-						Log.d("Kruno", "dd: onSwipeLeft");
+						GameStatus.getCurrentObject().rotate('x');
 						break;
 					case 3:
-						Log.d("Kruno", "dd: onSwipeBottom");
+						GameStatus.getCurrentObject().rotate('y');
 						break;
 					case 4:
-						Log.d("Kruno", "dd: onSwipeTop");
+						GameStatus.getCurrentObject().rotate('y');
 						break;
 				}
 				break;
 		}
 	}
 
-	private static final int SWIPE_THRESHOLD = 100;
-	private static final int SWIPE_VELOCITY_THRESHOLD = 100;
-
 	public int detectDirection(float xFirst, float yFirst, float xSecond,
 			float ySecond) {
 		int rez = 0;
+		int limit = 50;
 		try {
 
 			float diffY = ySecond - yFirst;
 			float diffX = xSecond - xFirst;
+			Log.d("RG", "diffX: " + diffX);
+			Log.d("RG", "diffY: " + diffY);
 			if (Math.abs(diffX) > Math.abs(diffY)) {
+				if (Math.abs(diffX) < limit)
+					return 0;
 				if (diffX > 0) {
 					return 1;
 				} else {
 					return 2;
 				}
 			} else {
+				if (Math.abs(diffY) < limit)
+					return 0;
 				if (diffY > 0) {
 					return 3;
 				} else {
