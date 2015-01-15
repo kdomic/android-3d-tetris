@@ -16,9 +16,11 @@ public abstract class AbstractDraw {
 		for (int i = 0; i < objectMatrix.length; i++)
 			for (int j = 0; j < objectMatrix.length; j++)
 				for (int k = 0; k < objectMatrix.length; k++)
-					if(objectMatrix[i][j][k] = true){
+					if(objectMatrix[i][j][k] == true){
+						gl.glPushMatrix();
 						gl.glTranslatef(i, j, k);
 						c.draw(gl);
+						gl.glPopMatrix();
 					}
 		gl.glPopMatrix();
 	}

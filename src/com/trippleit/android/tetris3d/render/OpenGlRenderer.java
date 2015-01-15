@@ -37,8 +37,7 @@ public class OpenGlRenderer extends AbstractOpenGlRenderer {
 		}
 
 		if (getOneSec() == 0) {
-			if(GameStatus.isEnd()==false){
-				Log.d("Kruno","dropDown()");
+			if(GameStatus.isEnd()==false){				
 				dropDown();
 			}
 		}
@@ -68,7 +67,9 @@ public class OpenGlRenderer extends AbstractOpenGlRenderer {
 	}
 
 	private void newShpe() {
-		GameStatus.setCurrentObject(chooseObject(randInt(1, 1)));
+		int objNum = randInt(0, 5);
+		Log.d("Kruno", objNum+"");
+		GameStatus.setCurrentObject(chooseObject(objNum));
 		GameStatus.setCurrentPosition(GameStatus.getStartX(), GameStatus.getStartY(), GameStatus.getGameHeight());
 	}
 
@@ -107,8 +108,7 @@ public class OpenGlRenderer extends AbstractOpenGlRenderer {
 		boolean ret = GameStatus.setCurrentObjectPositionDown();
 		if (!ret) {
 			GameStatus.savePositionToBoolMatrix();
-			if (GameStatus.checkEnd() == false) {
-				Log.d("Kruno","newShpe()");
+			if (GameStatus.checkEnd() == false) {			
 				newShpe();
 			}
 		}

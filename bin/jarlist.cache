@@ -1,5 +1,5 @@
 # cache for current jar dependency. DO NOT EDIT.
 # format is <lastModified> <length> <SHA-1> <path>
 # Encoding is UTF-8
-1418164293899 648327 ded9acc6a9792b8f1afc470f0c9cd36d178914cd C:\Users\Matija\workspace\RG_projekt\android-support-v7-appcompat\libs\android-support-v4.jar
-1420968627867 987314 3b20dc871d179ba476082efe543dc1b38db46e30 C:\Users\Matija\workspace\RG_projekt\android-3d-tetris\libs\android-support-v4.jar
+1420205441000 987314 3b20dc871d179ba476082efe543dc1b38db46e30 /home/kdomic/GitHub/android-3d-tetris/libs/android-support-v4.jar
+1414178755000 987314 3b20dc871d179ba476082efe543dc1b38db46e30 /home/kdomic/EclipseWorkspace/appcompat_v7/libs/android-support-v4.jar

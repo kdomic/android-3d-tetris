@@ -18,10 +18,9 @@ public class ObjectL extends AbstractDraw implements IShape {
 
 	@Override
 	public void draw(GL10 gl) {
-		gl.glPushMatrix();
-
+		drawObject(gl, objectMatrix, color);
+		/*gl.glPushMatrix();
 		Cube c = new Cube(color);
-
 		gl.glTranslatef(1, 0, 0);
 		c.draw(gl);
 		gl.glTranslatef(-1, 0, 0);
@@ -30,8 +29,7 @@ public class ObjectL extends AbstractDraw implements IShape {
 		c.draw(gl);
 		gl.glTranslatef(0, 0, 1);
 		c.draw(gl);
-
-		gl.glPopMatrix();
+		gl.glPopMatrix();*/
 	}
 
 	@Override

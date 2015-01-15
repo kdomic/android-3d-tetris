@@ -18,19 +18,17 @@ public class ObjectC extends AbstractDraw implements IShape {
 
 	@Override
 	public void draw(GL10 gl) {
-		gl.glPushMatrix();
-		
-		Cube c = new Cube(color);
-		
+		drawObject(gl, objectMatrix, color);
+		/*gl.glPushMatrix();		
+		Cube c = new Cube(color);		
 		c.draw(gl);
 		gl.glTranslatef(1, 0, 0);
 		c.draw(gl);
 		gl.glTranslatef(0, 1, 0);
 		c.draw(gl);
 		gl.glTranslatef(-1, 0, 0);
-		c.draw(gl);
-		
-		gl.glPopMatrix();
+		c.draw(gl);		
+		gl.glPopMatrix();*/
 	}
 
 	@Override
