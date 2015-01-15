@@ -9,5 +9,7 @@
     <string name="right">RIGHT</string>
     
     <string name="tempNote">Use swipe to move a cube</string>
+    <string name="start">START</string>
+    
 
 </resources>

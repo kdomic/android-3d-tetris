@@ -6,7 +6,6 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Handler;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
@@ -91,9 +90,6 @@ public class ButtonControls extends Activity implements OnTouchListener {
 			break;
 		}
 
-		Log.i("RG", "[" + Float.toString(GameStatus.getCameraR()) + "],["
-				+ Float.toString(GameStatus.getCameraH()) + "]");
-
 		return false;
 	}
 
@@ -115,9 +111,8 @@ public class ButtonControls extends Activity implements OnTouchListener {
 
 	Runnable mAction_left = new Runnable() {
 		@Override
-		public void run() {
-			System.out.println("Performing action...");
-			GameStatus.setCameraR(GameStatus.getCameraR() + 1);
+		public void run() {			
+			GameStatus.setCameraR(GameStatus.getCameraR() - 1);
 			mHandler_left.postDelayed(this, 50);
 		}
 	};
@@ -125,7 +120,7 @@ public class ButtonControls extends Activity implements OnTouchListener {
 	Runnable mAction_right = new Runnable() {
 		@Override
 		public void run() {
-			GameStatus.setCameraR(GameStatus.getCameraR() - 1);
+			GameStatus.setCameraR(GameStatus.getCameraR() + 1);
 			mHandler_right.postDelayed(this, 50);
 		}
 	};
