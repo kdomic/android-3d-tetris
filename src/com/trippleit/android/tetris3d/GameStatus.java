@@ -23,9 +23,9 @@ public class GameStatus {
 	private static String gameColorMatrix[][][];
 
 	private static boolean dropFast;
-	private static boolean end;
-
-	public static void init(Context c) {
+	private static boolean end;	
+	
+	public static void init(Context _c) {
 		gameHeight = 10;
 		gridSize = 5;
 		restartGameBoolMatrix();
@@ -306,8 +306,9 @@ public class GameStatus {
 
 	public static boolean checkEnd() {
 		end = gameBoolMatrix[startX][startY][gameHeight - 1];
-		if (end)
+		if (end){
 			Log.d("Kruno", "---END---");
+		}
 		return end;
 	}
 

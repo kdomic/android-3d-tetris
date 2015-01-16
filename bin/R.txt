@@ -361,7 +361,7 @@ int id bottom 0x7f050016
 int id btnDown 0x7f050044
 int id btnLeft 0x7f050045
 int id btnRight 0x7f050046
-int id btnStart 0x7f050048
+int id btnStart 0x7f050049
 int id btnUp 0x7f050043
 int id checkbox 0x7f05002b
 int id collapseActionView 0x7f05000f
@@ -380,7 +380,7 @@ int id homeAsUp 0x7f050007
 int id icon 0x7f050028
 int id ifRoom 0x7f05000c
 int id image 0x7f050025
-int id ivInstructions 0x7f050047
+int id ivInstructions 0x7f050048
 int id listMode 0x7f050002
 int id list_item 0x7f050027
 int id middle 0x7f050013
@@ -409,6 +409,7 @@ int id submit_area 0x7f05003e
 int id tabMode 0x7f050003
 int id title 0x7f050029
 int id top 0x7f050015
+int id tvGameOver 0x7f050047
 int id up 0x7f050018
 int id useLogo 0x7f050005
 int id withText 0x7f05000e

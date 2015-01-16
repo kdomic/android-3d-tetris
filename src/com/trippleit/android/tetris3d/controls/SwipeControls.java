@@ -14,22 +14,22 @@ public class SwipeControls implements OnTouchListener {
 	}
 
 	public void onSwipeRight() {
-		Log.d("Kruno", "" + isMultiTouch);
+		//Log.d("Kruno", "" + isMultiTouch);
 		GameStatus.setCurrentXPositionPos();
 	}
 
 	public void onSwipeLeft() {
-		Log.d("Kruno", "" + isMultiTouch);
+		//Log.d("Kruno", "" + isMultiTouch);
 		GameStatus.setCurrentXPositionNeg();
 	}
 
 	public void onSwipeTop() {
-		Log.d("Kruno", "" + isMultiTouch);
+		//Log.d("Kruno", "" + isMultiTouch);
 		GameStatus.setCurrentYPositionPos();
 	}
 
 	public void onSwipeBottom() {
-		Log.d("Kruno", "" + isMultiTouch);
+		//Log.d("Kruno", "" + isMultiTouch);
 		GameStatus.setCurrentYPositionNeg();
 	}
 
@@ -73,7 +73,9 @@ public class SwipeControls implements OnTouchListener {
 				break;
 			}
 			case MotionEvent.ACTION_UP: {
-				if((System.currentTimeMillis() - time)<100){
+				//Log.d("RG", "diffX: " + ((System.currentTimeMillis() - time)<90));
+				
+				if((System.currentTimeMillis() - time)<90){
 					GameStatus.setDropFast();
 					return true;
 				}				
@@ -135,8 +137,6 @@ public class SwipeControls implements OnTouchListener {
 
 			float diffY = ySecond - yFirst;
 			float diffX = xSecond - xFirst;
-			Log.d("RG", "diffX: " + diffX);
-			Log.d("RG", "diffY: " + diffY);
 			if (Math.abs(diffX) > Math.abs(diffY)) {
 				if (Math.abs(diffX) < limit)
 					return 0;

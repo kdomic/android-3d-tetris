@@ -10,8 +10,9 @@ import android.os.Bundle;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.TextView;
 
-public class MainActivity extends Activity {
+public class MainActivity extends Activity {	
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +44,33 @@ public class MainActivity extends Activity {
 		b3.setOnTouchListener(bc);
 		b4.setOnTouchListener(bc);
 
+		final TextView tv = (TextView) findViewById(R.id.tvGameOver);		
+		Thread timer = new Thread() {
+			@Override
+			public void run() {
+				super.run();
+				int time = 0;
+				while (true) {
+					try {
+						sleep(1000);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+					time++;
+					final int temp = time;
+					runOnUiThread(new Runnable() {  
+	                    @Override
+	                    public void run() {
+	                    	if(GameStatus.isEnd())
+	                    		tv.setText("GAME OVER :(");
+	                    	else
+	                    		tv.setText("Time: " + temp);
+	                    }
+	                });					
+				}
+			}
+		};
+		timer.start();
 	}
 
 }

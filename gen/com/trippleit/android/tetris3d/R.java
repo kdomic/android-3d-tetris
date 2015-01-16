@@ -1663,7 +1663,7 @@ containing a value of this type.
         public static final int btnDown=0x7f050044;
         public static final int btnLeft=0x7f050045;
         public static final int btnRight=0x7f050046;
-        public static final int btnStart=0x7f050048;
+        public static final int btnStart=0x7f050049;
         public static final int btnUp=0x7f050043;
         public static final int checkbox=0x7f05002b;
         public static final int collapseActionView=0x7f05000f;
@@ -1682,7 +1682,7 @@ containing a value of this type.
         public static final int icon=0x7f050028;
         public static final int ifRoom=0x7f05000c;
         public static final int image=0x7f050025;
-        public static final int ivInstructions=0x7f050047;
+        public static final int ivInstructions=0x7f050048;
         public static final int listMode=0x7f050002;
         public static final int list_item=0x7f050027;
         public static final int middle=0x7f050013;
@@ -1711,6 +1711,7 @@ containing a value of this type.
         public static final int tabMode=0x7f050003;
         public static final int title=0x7f050029;
         public static final int top=0x7f050015;
+        public static final int tvGameOver=0x7f050047;
         public static final int up=0x7f050018;
         public static final int useLogo=0x7f050005;
         public static final int withText=0x7f05000e;
