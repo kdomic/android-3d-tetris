@@ -11,37 +11,38 @@
     
     <LinearLayout
         android:id="@+id/xyz"
-        android:layout_width="fill_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
         android:orientation="horizontal" >
 
         <Button
             android:id="@+id/btnUp"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:layout_height="wrap_content" 
+            android:layout_marginLeft="5dp"           
             android:background="@drawable/camera_up" />
 
         <Button
             android:id="@+id/btnDown"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:layout_height="wrap_content"       
+            android:layout_marginLeft="5dp"     
             android:background="@drawable/camera_down" />
 
         <Button
             android:id="@+id/btnLeft"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:layout_marginLeft="5dp"
             android:background="@drawable/camera_left" />
 
         <Button
             android:id="@+id/btnRight"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:layout_height="wrap_content"    
+            android:layout_marginLeft="5dp"        
             android:background="@drawable/camera_right" />
     </LinearLayout>
 
